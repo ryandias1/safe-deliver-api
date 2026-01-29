@@ -13,17 +13,18 @@ import java.time.Instant;
 public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
-    private Algorithm algorithm = Algorithm.HMAC256(secret);
 
     public String generateToken(User user) {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
                 .withIssuer("safe-deliver")
                 .withSubject(user.getEmail())
                 .withExpiresAt(Instant.now().plusSeconds(3600))
-                .sign(this.algorithm);
+                .sign(algorithm);
     }
 
     public String validateToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.require(algorithm)
                 .withIssuer("safe-deliver")
                 .build()

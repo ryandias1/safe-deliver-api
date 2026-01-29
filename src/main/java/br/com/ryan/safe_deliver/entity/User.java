@@ -20,7 +20,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,7 +29,7 @@ public class User implements UserDetails {
     private String password;
     private Role role;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "hospital_id")
     @JsonBackReference
     private Hospital hospital;

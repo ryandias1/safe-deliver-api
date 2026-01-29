@@ -15,16 +15,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String CNPJ;
-
-    @OneToOne
-    @JoinColumn(name = "manager_id")
-    @JsonBackReference
-    private User manager;
 }

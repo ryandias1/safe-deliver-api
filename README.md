@@ -88,6 +88,7 @@ O sistema implementa uma camada de auditoria persistente. Cada transição de st
 - Valor anterior e novo valor.
 - Timestamp da transação.
 
-Desenvolvido por Ryan — [Conecte-se comigo no LinkedIn](www.linkedin.com/in/ryancdias1)
+Desenvolvido por Ryan — <a href="www.linkedin.com/in/ryancdias1" target="_blank">Conecte-se comigo no LinkedIn</a>
+
 
 

@@ -21,8 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,7 +54,7 @@ public class ShipmentService {
         return toResponse(shipmentSaved, null);
     }
 
-    public ShipmentRegisterResponse setDriver(SetDriverRequest setDriverRequest, UUID shipmentId) throws AccessDeniedException {
+    public ShipmentRegisterResponse setDriver(SetDriverRequest setDriverRequest, UUID shipmentId) {
         User user = getLoggedUser();
         Shipment ship = shipmentRepository.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment não encontrado"));
         Hospital hospital = hospitalRepository.findById(ship.getHospitalOrigin().getId()).orElseThrow(() -> new EntityNotFoundException("Hospital não encontrado"));
@@ -62,7 +63,7 @@ public class ShipmentService {
             throw new AccessDeniedException("Manager não pertence a esse hospital");
         }
         User motorista = userRepository.findById(setDriverRequest.driverID()).orElseThrow(() -> new EntityNotFoundException("Motorista não encontrado"));
-        if (motorista.getHospital().getId() != hospitalId) {
+        if (!motorista.getHospital().getId().equals(hospitalId)) {
             throw new IllegalArgumentException("Motorista não pertence a esse hospital");
         }
         ship.setMotorista(motorista);
@@ -70,25 +71,14 @@ public class ShipmentService {
         return toResponse(ship, motorista);
     }
 
+    @Transactional
     public ShipmentRegisterResponse setStatus(SetStatusRequest setStatusRequest, UUID shipmentId) throws AccessDeniedException {
         User user = getLoggedUser();
         Shipment shipment = shipmentRepository.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Carga não encontrada"));
         Status oldValue = shipment.getStatus();
-        if (!(shipment.getMotorista().getId().equals(user.getId()))) {
-            throw new AccessDeniedException("Essa carga nao pertence a você");
-        }
-        if (shipment.getStatus() == Status.ENTREGUE) {
-            throw new IllegalArgumentException("Mudança de status invalida");
-        }
-        if (shipment.getStatus() == Status.PENDENTE) {
-            if (setStatusRequest.status() != Status.EM_TRANSITO) throw new IllegalArgumentException("Mudança de status invalida");
-            shipment.setStatus(setStatusRequest.status());
-
-        }
-        if (shipment.getStatus() == Status.EM_TRANSITO) {
-            if (setStatusRequest.status() != Status.ENTREGUE) throw new IllegalArgumentException("Mudança de status invalida");
-            shipment.setStatus(setStatusRequest.status());
-        }
+        Status newValue = setStatusRequest.status();
+        validateStatus(oldValue, newValue);
+        shipment.setStatus(newValue);
         shipmentRepository.save(shipment);
         auditLogRepository.save(createAuditLog(shipment, oldValue));
         return toResponse(shipment, shipment.getMotorista());
@@ -112,7 +102,7 @@ public class ShipmentService {
         HospitalRegisterResponse hospitalDestinationRegisterResponse = new HospitalRegisterResponse(shipment.getHospitalDestination().getId(), shipment.getHospitalDestination().getName(), shipment.getHospitalDestination().getCNPJ());
         UserRegisterResponse motoristaResponse = null;
         if (motorista != null) {
-            motoristaResponse = new UserRegisterResponse(motorista.getId(), motorista.getName(), motorista.getEmail(), motorista.getPassword(), motorista.getRole(), motorista.getHospital().getId());
+            motoristaResponse = new UserRegisterResponse(motorista.getId(), motorista.getName(), motorista.getEmail(), motorista.getRole(), motorista.getHospital().getId());
         }
         return new ShipmentRegisterResponse(shipment.getId(), shipment.getDescption(), shipment.getType(), shipment.getStatus(), hospitalOriginRegisterResponse, hospitalDestinationRegisterResponse, motoristaResponse);
     }
@@ -126,5 +116,17 @@ public class ShipmentService {
         auditLog.setNewValue(shipment.getStatus());
 
         return auditLog;
+    }
+
+    private void validateStatus(Status currentStatus, Status newStatus) {
+        boolean isValid = switch (currentStatus) {
+            case Status.PENDENTE -> newStatus == Status.EM_TRANSITO;
+            case Status.EM_TRANSITO -> newStatus == Status.ENTREGUE;
+            case Status.ENTREGUE -> false;
+        };
+
+        if (!isValid) {
+            throw new IllegalArgumentException("Transição de status inválida: " + currentStatus + " -> " + newStatus);
+        }
     }
 }

@@ -8,7 +8,6 @@ public record UserRegisterResponse(
         UUID id,
         String name,
         String email,
-        String password,
         Role role,
         UUID hospitalId
 ) {

@@ -77,6 +77,9 @@ public class ShipmentService {
         Shipment shipment = shipmentRepository.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Carga não encontrada"));
         Status oldValue = shipment.getStatus();
         Status newValue = setStatusRequest.status();
+        if (!(shipment.getMotorista().getId().equals(user.getId()))) {
+            throw new AccessDeniedException("Essa carga nao pertence a você");
+        }
         validateStatus(oldValue, newValue);
         shipment.setStatus(newValue);
         shipmentRepository.save(shipment);

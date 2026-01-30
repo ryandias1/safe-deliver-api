@@ -4,7 +4,6 @@ import br.com.ryan.safe_deliver.dto.request.SetDriverRequest;
 import br.com.ryan.safe_deliver.dto.request.SetStatusRequest;
 import br.com.ryan.safe_deliver.dto.request.ShipmentRegisterRequest;
 import br.com.ryan.safe_deliver.dto.response.ShipmentRegisterResponse;
-import br.com.ryan.safe_deliver.entity.Shipment;
 import br.com.ryan.safe_deliver.service.ShipmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 

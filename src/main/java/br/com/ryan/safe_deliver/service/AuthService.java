@@ -1,10 +1,8 @@
 package br.com.ryan.safe_deliver.service;
 
 import br.com.ryan.safe_deliver.dto.request.UserLoginRequest;
-import br.com.ryan.safe_deliver.dto.request.UserRegisterRequest;
 import br.com.ryan.safe_deliver.dto.response.UserLoginResponse;
 import br.com.ryan.safe_deliver.entity.User;
-import br.com.ryan.safe_deliver.repository.UserRepository;
 import br.com.ryan.safe_deliver.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -59,6 +59,6 @@ public class AdminService {
         savedUser.setRole(userRegisterRequest.role());
         savedUser.setHospital(hospital);
         savedUser = userRepository.save(savedUser);
-        return new UserRegisterResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getPassword(), savedUser.getRole(), hospitalId);
+        return new UserRegisterResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRole(), hospitalId);
     }
 }

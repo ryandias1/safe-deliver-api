@@ -4,7 +4,6 @@ import br.com.ryan.safe_deliver.enums.ShipmentType;
 import br.com.ryan.safe_deliver.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

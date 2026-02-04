@@ -2,7 +2,6 @@ package br.com.ryan.safe_deliver.entity;
 
 import br.com.ryan.safe_deliver.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

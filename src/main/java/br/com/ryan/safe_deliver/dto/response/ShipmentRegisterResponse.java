@@ -1,6 +1,5 @@
 package br.com.ryan.safe_deliver.dto.response;
 
-import br.com.ryan.safe_deliver.entity.Hospital;
 import br.com.ryan.safe_deliver.enums.ShipmentType;
 import br.com.ryan.safe_deliver.enums.Status;
 

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record ShipmentRegisterRequest(
         @NotBlank(message = "Campo descrição não pode estar vazio") String description,
-        @NotNull ShipmentType type,
-        @NotNull UUID hospitalDestinationId
+        @NotNull(message = "Campo type em branco") ShipmentType type,
+        @NotNull(message = "Campo hospitalDestinationId em branco") UUID hospitalDestinationId
 ) {
 }

@@ -4,6 +4,6 @@ import br.com.ryan.safe_deliver.enums.Status;
 import jakarta.validation.constraints.NotNull;
 
 public record SetStatusRequest(
-        @NotNull Status status
+        @NotNull(message = "Campo status em branco") Status status
 ) {
 }

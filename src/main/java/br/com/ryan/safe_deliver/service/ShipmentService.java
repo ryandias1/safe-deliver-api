@@ -43,7 +43,7 @@ public class ShipmentService {
 
     public ShipmentRegisterResponse registerShipment(ShipmentRegisterRequest shipmentRegisterRequest) {
         User user = getLoggedUser();
-        Hospital hospitalDest = hospitalRepository.findById(shipmentRegisterRequest.hospitalDestinationId()).orElseThrow(()->new EntityNotFoundException("Hospital de Destino não encontrado"));
+        Hospital hospitalDest = hospitalRepository.findById(shipmentRegisterRequest.hospitalDestinationId()).orElseThrow(()-> new EntityNotFoundException("Hospital de Destino não encontrado"));
         Shipment shipment = new Shipment();
         shipment.setDescption(shipmentRegisterRequest.description());
         shipment.setType(shipmentRegisterRequest.type());

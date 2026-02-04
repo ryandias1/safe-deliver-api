@@ -10,7 +10,7 @@ public record UserRegisterRequest(
         @NotBlank(message = "Campo name em branco") String name,
         @NotBlank(message = "Campo email em branco") String email,
         @NotBlank(message = "Campo password em branco") String password,
-        @NotNull Role role,
+        @NotNull(message = "Campo role em branco") Role role,
         UUID hospital_id
 ) {
 }
